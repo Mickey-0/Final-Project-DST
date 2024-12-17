@@ -6,7 +6,6 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import string
 
-# Download NLTK resources if not already downloaded
 try:
     nltk.data.find('tokenizers/punkt')
     nltk.data.find('corpora/stopwords')
@@ -14,17 +13,14 @@ except LookupError:
     nltk.download('punkt')
     nltk.download('stopwords')
 
-# Initialize VADER SentimentIntensityAnalyzer
 analyzer = SentimentIntensityAnalyzer()
 
-# Function to preprocess and tokenize review text
 def preprocess_and_tokenize(text):
     tokens = word_tokenize(text.lower())
     stop_words = set(stopwords.words('english'))
     tokens = [word for word in tokens if word not in stop_words and word not in string.punctuation]
     return ' '.join(tokens)
 
-# Function to handle negations and adjust sentiment score
 def handle_negations(text):
     negations = ["not", "never", "no", "nothing", "nowhere", "none", "neither", "nor"]
     words = text.split()
@@ -42,7 +38,6 @@ def handle_negations(text):
     
     return ' '.join(processed_text)
 
-# Function to calculate sentiment score and polarity
 def calculate_sentiment(text):
     sentiment = analyzer.polarity_scores(text)
     score = sentiment['compound']
@@ -56,7 +51,6 @@ def calculate_sentiment(text):
     
     return score, polarity
 
-# Function to predict sentiment for a new review
 def predict_sentiment(new_review):
     score, polarity = calculate_sentiment(new_review)
     processed_review = preprocess_and_tokenize(new_review)
